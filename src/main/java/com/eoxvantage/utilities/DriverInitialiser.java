@@ -13,7 +13,7 @@ public class DriverInitialiser {
 
 	public static WebDriver driver1;
 
-	public static WebDriver driver(String url) {
+	public static WebDriver driver() {
 
 		// Added Maven dependency for the below line,
 		// now no need to to update the drivers manually, this will take care
@@ -25,8 +25,6 @@ public class DriverInitialiser {
 		System.out.println(option.getBrowserVersion());
 
 		option.addArguments("--disable-notifications");
-		// option.addArguments("headless"); //------ Not able to Run in this mode
-		// because file upload will trigger an external Window
 		option.addArguments("--disable-popup-blocking");
 		option.addArguments("--remote-allow-origins=*");
 		option.addArguments("version");
@@ -38,7 +36,6 @@ public class DriverInitialiser {
 
 		driver1.manage().window().maximize();
 		driver1.manage().deleteAllCookies();
-		driver1.get(url);
 		driver1.manage().timeouts().implicitlyWait(Duration.ofSeconds(60));
 		driver1.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(100));
 
