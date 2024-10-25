@@ -37,23 +37,31 @@ public class BrowserActions {
     }
 
     // Constructor to initialize WebDriver and WebDriverWait
-    public BrowserActions(WebDriver driver) {
+    public BrowserActions(WebDriver driver, ExtentTest extentTest) {
         this.driver = driver;
         this.wait = new WebDriverWait(driver, Duration.ofSeconds(20));
-        this.extentTest = extentTest;
+        this.extentTest = extentTest;  // Assign the ExtentTest instance
         logAndReport("BrowserActions initialized.");
     }
+
     
-    // Helper method to log and report messages
+ // Helper method to log and report messages
     private void logAndReport(String message) {
-        logAndReport(message);
-        extentTest.log(Status.INFO, message);  // Log to Extent Report
+        logger.info(message);  // Log to Java Logger
+        if (extentTest != null) {  // Ensure ExtentTest is not null
+            extentTest.log(Status.INFO, message);  // Log to Extent Report
+        }
     }
-    
+
+    // Log errors to both Logger and ExtentTest
     private void logAndReportError(String message, Exception e) {
-        logAndReportError(message + ": " + e.getMessage(), e);
-        extentTest.log(Status.FAIL, message + ": " + e.getMessage());
+        String errorMsg = message + ": " + e.getMessage();
+        logger.severe(errorMsg);  // Log error to Java Logger
+        if (extentTest != null) {  // Ensure ExtentTest is not null
+            extentTest.log(Status.FAIL, errorMsg);  // Log error to Extent Report
+        }
     }
+
 
  // Click an element and log the action
     public void click(WebElement element) {
