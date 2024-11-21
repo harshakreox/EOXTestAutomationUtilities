@@ -21,7 +21,6 @@ public class BrowserActions {
 	private WebDriver driver;
 	private WebDriverWait wait;
 	private ExtentTest extentTest;
-	Alert alert = driver.switchTo().alert();
 	private static final Logger logger = Logger.getLogger(BrowserActions.class.getName());
 
 	// Static block to configure the logger
@@ -124,6 +123,7 @@ public class BrowserActions {
 		try {
 			wait.until(ExpectedConditions.alertIsPresent());
 			if (isAlertPresent()) {
+				Alert alert = driver.switchTo().alert();
 				logAndReport("Alert text: " + alert.getText());
 				alert.accept(); // Accept the alert
 				logAndReport("Alert accepted.");
@@ -144,6 +144,7 @@ public class BrowserActions {
 		try {
 			wait.until(ExpectedConditions.alertIsPresent());
 			if(isAlertPresent()) {
+				Alert alert = driver.switchTo().alert();
 				logAndReport("Alert text: " + alert.getText());
 				alert.dismiss();
 				logAndReport("Alert dismissed.");
