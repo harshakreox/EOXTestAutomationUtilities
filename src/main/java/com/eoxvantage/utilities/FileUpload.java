@@ -3,35 +3,38 @@ package com.eoxvantage.utilities;
 import java.awt.AWTException;
 import java.awt.Toolkit;
 import java.awt.datatransfer.StringSelection;
+import java.util.Optional;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 
 public class FileUpload {
 	
 	static String testFile;
-	public FileUpload(String testFile) {
+	WebDriver driver;
+	public FileUpload(WebDriver driver, String testFile) {
+		this.driver = driver;
 		this.testFile = testFile;
 	}
 	
-	DriverInitialiser driver = new DriverInitialiser();
 
 	// This will get the current directory and then the this path will be appended
 	// to the file path where the files are stored.
 	static String path = System.getProperty("user.dir");
 
-	public static String copyFilepath(String file) throws AWTException {
+	public static void copyFilepath(String filePath) throws AWTException {
 
-		System.out.println(path + testFile);
-		StringSelection ss2 = new StringSelection(path.concat(testFile));
-		Toolkit.getDefaultToolkit().getSystemClipboard().setContents(ss2, null);
+		System.out.println("Processing file path: " + filePath);
+		StringSelection filePathSelection  = new StringSelection(filePath);
+		Toolkit.getDefaultToolkit().getSystemClipboard().setContents(filePathSelection, null);
 		RobotActions.copyPasteAction();
-		return null;
 	}
 
-	public static void UploadFile(WebDriver driver) throws InterruptedException, AWTException {
+	public void UploadFile(Optional<WebElement> element, WebElement browse) throws InterruptedException, AWTException {
 		FileUpload.copyFilepath(null);
 		Thread.sleep(5000);
+		confirmFileUpload(Optional.empty(), browse);
 	}
 
 	/**
@@ -40,18 +43,26 @@ public class FileUpload {
 	 * @throws AWTException
 	 * @throws InterruptedException
 	 */
-	public static void confirmFileUpload(WebDriver driver, By element) throws AWTException, InterruptedException {
+	public void confirmFileUpload(Optional<WebElement> element, WebElement browse) throws AWTException, InterruptedException {
 
-		String Filename = driver.findElement(element).getAttribute("innerHTML");
-		System.out.println("The Uploaded file name is " + Filename);
+		if (element.isPresent()) { // Check if the element is provided
+	        WebElement fileElement = element.get();
 
-		if (Filename == null) {
-			driver.findElement(element).click();
-			Thread.sleep(2000);
-			FileUpload.copyFilepath(null);
-		} else {
-			System.out.println("File uploaded!");
-		}
+	        // Get the file name from the element
+	        String fileName = fileElement.getAttribute("innerHTML");
+	        System.out.println("The uploaded file name is: " + fileName);
+
+	        // Handle cases where the file name is null or empty
+	        if (fileName == null || fileName.isEmpty()) {
+	        	browse.click(); // Retry file upload if necessary
+	            Thread.sleep(2000);
+	            FileUpload.copyFilepath(null); // Provide file path dynamically as needed
+	        } else {
+	            System.out.println("File uploaded successfully!");
+	        }
+	    } else {
+	        System.out.println("No file confirmation element provided. Skipping verification.");
+	    }
 	}
 
 }
