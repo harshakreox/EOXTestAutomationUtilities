@@ -1,49 +1,43 @@
 package com.eoxvantage.utilities;
 
-import java.time.Duration;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
-import org.testng.annotations.AfterSuite;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
 
 public class DriverInitialiser {
 
-	public static WebDriver driver1;
+	private static ThreadLocal<WebDriver> driver = new ThreadLocal<>();
 
-	public static WebDriver driver() {
-
-		// Added Maven dependency for the below line,
-		// now no need to to update the drivers manually, this will take care
-
-		WebDriverManager.chromedriver().setup();
-
-		ChromeOptions option = new ChromeOptions();
-
-		System.out.println(option.getBrowserVersion());
-
-		option.addArguments("--disable-notifications");
-		option.addArguments("--disable-popup-blocking");
-		option.addArguments("--remote-allow-origins=*");
-		option.addArguments("version");
-		option.addArguments("--disable-infobars");
-//		option.addArguments("force-device-scale-factor=0.75");
-		option.addArguments("high-dpi-support=0.75");
-
-		WebDriver driver1 = new ChromeDriver(option);
-
-		driver1.manage().window().maximize();
-		driver1.manage().deleteAllCookies();
-		driver1.manage().timeouts().implicitlyWait(Duration.ofSeconds(60));
-		driver1.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(100));
-
-		return driver1;
+	private DriverInitialiser() {
 	}
 
-	@AfterSuite
-	public void tearDown() {
-		driver1.close();
+	public static WebDriver getDriver() {
+
+		if (driver.get() == null) {
+
+			// Added Maven dependency for the below line,
+			// now no need to to update the drivers manually, this will take care
+			WebDriverManager.chromedriver().setup();
+			ChromeOptions options = new ChromeOptions();
+			options.addArguments("--start-maximized"); // Open browser in maximized mode
+			options.addArguments("--disable-notifications"); // Disable browser notifications
+			options.addArguments("--incognito"); // Open browser in incognito mode
+	//		options.addArguments("--headless"); // Run in headless mode (if needed) but cannot run since file uploads do not work in headless 
+
+			// You can also add experimental options or preferences if needed
+			options.addArguments("--remote-allow-origins=*");
+			driver.set(new ChromeDriver(options)); // Initialize WebDriver with ChromeOptions
+		}
+		return driver.get();
+	}
+
+	public void quitDriver() {
+		if (driver.get() != null) {
+			driver.get().quit();
+			driver.remove();
+		}
 	}
 }

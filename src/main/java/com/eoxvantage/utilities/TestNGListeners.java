@@ -21,7 +21,7 @@ public class TestNGListeners implements ITestListener {
     private ThreadLocal<ExtentTest> test = new ThreadLocal<>();
 
     CurrentDateandTime date = new CurrentDateandTime();
-    private WebDriver driver = DriverInitialiser.driver1;
+    private WebDriver driver = DriverInitialiser.getDriver();
 
     @Override
     public void onStart(ITestContext context) {
