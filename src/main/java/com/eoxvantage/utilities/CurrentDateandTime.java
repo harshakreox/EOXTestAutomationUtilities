@@ -15,7 +15,7 @@ public class CurrentDateandTime {
 	 * @return theCurrentDate
 	 */
 	public static String date() {
-		String date = date1.toString().formatted(DateTimeFormatter.ofPattern("mm dd yyyy", myLocale));
+		 String date = date1.format(DateTimeFormatter.ofPattern("MM dd yyyy", myLocale)).toString();
 		System.out.println(date1);
 		return date;
 	}
@@ -26,7 +26,7 @@ public class CurrentDateandTime {
 	public static LocalTime time() {
 
 		LocalTime time1 = LocalTime.now();
-		String time = time1.toString().formatted(DateTimeFormatter.ofPattern("hh_mm_ss"), time1);
+		String time = time1.format(DateTimeFormatter.ofPattern("hh_mm_ss"));
 		System.out.println(time1);
 
 		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm");
@@ -41,8 +41,8 @@ public class CurrentDateandTime {
 	 * @return theFinalFormattedDate
 	 */
 	public String alterDateForYearsBefore(int yearsToBeSubtracted) {
-		return alteredDate = date1.minusYears(yearsToBeSubtracted).toString()
-				.formatted((DateTimeFormatter.ofPattern("mm-dd-yyyy", myLocale)));
+		return alteredDate = date1.minusYears(yearsToBeSubtracted)
+				.format((DateTimeFormatter.ofPattern("mm-dd-yyyy", myLocale))).toString();
 	}
 
 	/**
@@ -50,8 +50,8 @@ public class CurrentDateandTime {
 	 * @return theFinalFormattedDate
 	 */
 	public String alterDateForMonthsBefore(int monthsToBeSubtracted) {
-		return alteredDate = date1.minusMonths(monthsToBeSubtracted).toString()
-				.formatted((DateTimeFormatter.ofPattern("mm-dd-yyyy", myLocale)));
+		return alteredDate = date1.minusMonths(monthsToBeSubtracted)
+				.format((DateTimeFormatter.ofPattern("mm-dd-yyyy", myLocale))).toString();
 	}
 
 	/**
@@ -59,8 +59,8 @@ public class CurrentDateandTime {
 	 * @return theFinalFormattedDate
 	 */
 	public String alterDateForMonthsAfter(int monthsToBeAdded) {
-		return alteredDate = date1.plusMonths(monthsToBeAdded).toString()
-				.formatted((DateTimeFormatter.ofPattern("mm-dd-yyyy", myLocale)));
+		return alteredDate = date1.plusMonths(monthsToBeAdded)
+				.format((DateTimeFormatter.ofPattern("mm-dd-yyyy", myLocale))).toString();
 	}
 
 	/**
@@ -68,7 +68,7 @@ public class CurrentDateandTime {
 	 * @return theFinalFormattedDate
 	 */
 	public String alterDateForYearsAfter(int yearsToBeAdded) {
-		return alteredDate = date1.plusYears(yearsToBeAdded).toString()
-				.formatted((DateTimeFormatter.ofPattern("mm-dd-yyyy", myLocale)));
+		return alteredDate = date1.plusYears(yearsToBeAdded)
+				.format((DateTimeFormatter.ofPattern("mm-dd-yyyy", myLocale))).toString();
 	}
 }

@@ -125,7 +125,7 @@ public class GetDropdownList {
 		List<WebElement> dList = parentEle.findElements(ele);
 		dList.stream().forEach(s -> System.out.println(s.getText()));
 		WebElement resEle = dList.stream()
-				.filter(s -> s.getText().stripLeading().stripTrailing().equalsIgnoreCase(buttonName)).distinct()
+				.filter(s -> s.getText().trim().equalsIgnoreCase(buttonName)).distinct()
 				.findFirst().orElse(null);
 		System.out.println(resEle);
 		if (resEle != null) {
